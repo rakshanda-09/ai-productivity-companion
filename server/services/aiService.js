@@ -12,6 +12,9 @@ tasks and productivity stats, plus their question. Reply like a sharp, encouragi
 - Be concrete and specific to the data you were given, never generic filler.
 - Prefer short paragraphs or a tight bullet list over long prose.
 - If they're at real risk of missing a deadline, say so plainly and tell them what to do first.
+- If the user asks for a count, answer with the exact number first.
+- If they ask about tasks, list the task titles.
+- Never end a sentence abruptly.
 - Keep the whole reply under ~150 words.`;
 
 function buildContextBlock(context = {}) {
@@ -31,7 +34,9 @@ function buildContextBlock(context = {}) {
     `Pending tasks (${tasks.length} total, showing up to 10):`,
     taskLines || "(no pending tasks)",
     "",
-    `Stats: ${stats.completed ?? 0} completed, ${stats.overdue ?? 0} overdue, ${stats.atRisk ?? 0} currently at risk.`,
+    `Stats: ${stats.completed ?? 0} completed, ${stats.overdue ?? 0} overdue, ${
+      stats.atRisk ?? 0
+    } currently at risk.`,
   ].join("\n");
 }
 
@@ -50,29 +55,40 @@ async function callGemini(userMessage, contextBlock) {
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
-  const { data } = await axios.post(url, {
-    contents: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: `${SYSTEM_PROMPT}\n\n${contextBlock}\n\nUser question: ${userMessage}`,
-          },
-        ],
+  try {
+    const { data } = await axios.post(url, {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `${SYSTEM_PROMPT}\n\n${contextBlock}\n\nUser question: ${userMessage}`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.6,
+        maxOutputTokens: 512,
       },
-    ],
-    generationConfig: {
-      temperature: 0.6,
-      maxOutputTokens: 350,
-    },
-  });
+    });
 
-  const text =
-    data?.candidates?.[0]?.content?.parts
-      ?.map((part) => part.text)
-      .join("") || "";
+    const candidate = data?.candidates?.[0];
 
-  return text.trim() || "I couldn't generate a response right now.";
+    if (!candidate) {
+      return "I couldn't generate a response right now.";
+    }
+
+    const text =
+      candidate.content?.parts
+        ?.filter((part) => part.text)
+        .map((part) => part.text)
+        .join("") || "";
+
+    return text.trim() || "I couldn't generate a response right now.";
+  } catch (err) {
+    throw err;
+  }
 }
 
 /**
