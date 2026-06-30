@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme — white, soft violet surfaces, navy/black text */
+    --color-bg: 246 247 251;
+    --color-bg-soft: 255 255 255;
+    --color-bg-deep: 230 228 248;
+    --color-surface: 255 255 255;
+    --color-surface-raised: 240 238 252;
+    --color-border: 222 222 238;
+    --color-text-primary: 13 16 36;
+    --color-text-secondary: 75 81 112;
+    --color-text-tertiary: 130 136 168;
+    --color-brand: 124 58 237;
+    --color-brand-dim: 91 33 182;
+    --color-brand-glow: 167 139 250;
+    --color-violet: 109 40 217;
+    --page-gradient: radial-gradient(1100px 560px at 12% -8%, rgba(124, 58, 237, 0.08), transparent 60%),
+      radial-gradient(900px 520px at 105% 8%, rgba(91, 33, 182, 0.07), transparent 60%),
+      linear-gradient(180deg, rgb(230 228 248) 0%, rgb(246 247 251) 32%);
+  }
+
+  .dark {
+    /* Dark theme — deep navy-black blending into rich violet/purple, kept
+       consistently darker than a flat surface so the whole site reads as
+       one cohesive, professional palette rather than scattered panels. */
+    --color-bg: 6 8 17;
+    --color-bg-soft: 11 14 27;
+    --color-bg-deep: 2 3 9;
+    --color-surface: 13 17 32;
+    --color-surface-raised: 19 24 44;
+    --color-border: 33 40 66;
+    --color-text-primary: 240 240 250;
+    --color-text-secondary: 152 160 196;
+    --color-text-tertiary: 100 108 148;
+    --color-brand: 139 92 246;
+    --color-brand-dim: 91 33 182;
+    --color-brand-glow: 167 139 250;
+    --color-violet: 124 58 237;
+    --page-gradient: radial-gradient(1100px 560px at 12% -8%, rgba(139, 92, 246, 0.16), transparent 60%),
+      radial-gradient(900px 520px at 105% 8%, rgba(91, 33, 182, 0.16), transparent 60%),
+      linear-gradient(180deg, rgb(2 3 9) 0%, rgb(6 8 17) 32%);
+  }
+
+  * {
+    @apply border-border;
+  }
+  html {
+    color-scheme: dark;
+  }
+  html:not(.dark) {
+    color-scheme: light;
+  }
+  body {
+    @apply text-text-primary transition-colors duration-200;
+    background-color: rgb(var(--color-bg));
+    background-image: var(--page-gradient);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+  ::selection {
+    background-color: rgba(139, 92, 246, 0.35);
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-brand));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface border border-border rounded-2xl p-5;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5
+      font-semibold text-white hover:bg-brand-glow active:bg-brand-dim transition-colors
+      disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-border
+      bg-surface-raised px-4 py-2.5 font-medium text-text-primary hover:border-brand/50
+      transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .input-field {
+    @apply w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm
+      text-text-primary placeholder:text-text-tertiary focus:border-brand outline-none
+      transition-colors;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold font-mono tracking-wide;
+  }
+}

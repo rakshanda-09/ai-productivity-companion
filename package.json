@@ -1,0 +1,17 @@
+{
+  "name": "ai-productivity-companion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Productivity Companion — proactive deadline rescue & productivity system",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently -n SERVER,CLIENT -c blue,green \"npm:dev:server\" \"npm:dev:client\"",
+    "seed": "node database/seed.js",
+    "build:client": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
