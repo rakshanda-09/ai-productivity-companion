@@ -167,7 +167,7 @@ export default function Home() {
       <section className="border-y border-border bg-surface/60 py-20">
         <div className="mx-auto max-w-5xl px-6">
           <h2 className="text-center font-display text-2xl font-semibold sm:text-3xl">
-            A normal Tuesday, with and without it.
+            A normal day, with and without it.
           </h2>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
